@@ -1,13 +1,13 @@
 BlackLib library is wrote for control Beaglebone Black's feature. It takes power from C++ language. It is wrote for reading analog input, generating pwm signal and using gpio pins. In addition to them, it includes debugging feature. So you can check errors after use any of library functions.
 
 
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 + Debugging
 
 It always tracks member functions' errors and records these errors to error data structures. Additionally, all end node classes which interact with end users, have overloaded fail() functions. So you can check all errors or specific error whichever you want.
 
 
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 + Class Hierarchy
 
 ++ Library Core
@@ -22,13 +22,13 @@ BlackLib includes sub level cores for GPIO, ADC and PWM features. Preparing, dev
 
 End node classes specified for interacting with end user. You can read, set or control Beaglebone Black ADC, GPIO or PWM features from these classes. These classes include primary functions like reading, setting functions and include additional functions like parsing ADC values function, toggling functions for make easier your job.
 
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 + Definitions
 
 BlackLib includes enum type definitions for your and Beaglebone Black's safety. GPIO, ADC, PWM names; PWM, GPIO values; GPIO directions and a lot more features defined with enums. It means you can't use some of member functions without use this enums. These enums avoid user errors like writing 345 to gpio export file instead of 34.
 
 
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 + Contact
 
 For any comment or suggestion please contact the creator of BlackLib Library at ygtyce@gmail.com
