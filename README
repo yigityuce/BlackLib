@@ -22,6 +22,7 @@ BlackLib includes sub level cores for GPIO, ADC and PWM features. Preparing, dev
 
 End node classes specified for interacting with end user. You can read, set or control Beaglebone Black ADC, GPIO or PWM features from these classes. These classes include primary functions like reading, setting functions and include additional functions like parsing ADC values function, toggling functions for make easier your job.
 
+
 --------------------------------------------------------------------------------
 + Definitions
 
@@ -35,4 +36,4 @@ For any comment or suggestion please contact the creator of BlackLib Library at 
 
 
 --------------------------------------------------------------------------------
-+ + +				blacklib.yigityuce.com			  + + +
+				blacklib.yigityuce.com			  
