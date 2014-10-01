@@ -1,0 +1,445 @@
+ /*
+
+ ####################################################################################
+ #  BlackLib Library controls Beaglebone Black's inputs and outputs.                #
+ #  Copyright (C) 2013-2014 by Yigit YUCE                                           #
+ ####################################################################################
+ #                                                                                  #
+ #  This file is part of BlackLib library.                                          #
+ #                                                                                  #
+ #  BlackLib library is free software: you can redistribute it and/or modify        #
+ #  it under the terms of the GNU Lesser General Public License as published by     #
+ #  the Free Software Foundation, either version 3 of the License, or               #
+ #  (at your option) any later version.                                             #
+ #                                                                                  #
+ #  BlackLib library is distributed in the hope that it will be useful,             #
+ #  but WITHOUT ANY WARRANTY; without even the implied warranty of                  #
+ #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                   #
+ #  GNU Lesser General Public License for more details.                             #
+ #                                                                                  #
+ #  You should have received a copy of the GNU Lesser General Public License        #
+ #  along with this program.  If not, see <http://www.gnu.org/licenses/>.           #
+ #                                                                                  #
+ #  For any comment or suggestion please contact the creator of BlackLib Library    #
+ #  at ygtyce@gmail.com                                                             #
+ #                                                                                  #
+ ####################################################################################
+
+ */
+
+
+/*! \mainpage Main Page
+
+@n
+%BlackLib library is wrote for controlling Beaglebone Black's feature. It takes power from C++
+language. It is created for reading analog input, generating pwm signal, using gpio pins, and
+communicating with other devices over uart, spi and i2c. In addition to them, it includes
+debugging feature. So you can check errors after call any function in the library.
+- - - -
+@n
+<h2> Debugging </h2>
+It always tracks member functions errors and records these errors to data
+structures. All end nodes which interact with end users, have
+overloaded fail() functions. So you can check all errors or specific error whichever
+you want.@n @n
+
+- - - -
+@n
+<h2> Class Hierarchy </h2>
+
+- <h3> Library Core </h3>
+%BlackLib includes BlackCore class for doing core process. End users can't access to it.
+Because it is abstract class and all member functions, except constructor and destructor,
+are private or protected.@n @n
+
+- <h3> Sub Level Cores </h3>
+%BlackLib includes sub level cores for GPIO, ADC and PWM features. Preparing stages are realized
+in here, at sub level cores. Therefore, if you don't like end nodes or you don't want to use these,
+you can derive your own class(es), from these sub level cores. But end nodes designed for taking
+care of your all need.@n @n
+
+- <h3> End Node Classes </h3>
+End node classes are designed for interacting with end user. You can read, set or control
+Beaglebone Black's ADC, GPIO or PWM features or you can communicate with other devices with
+using UART, SPI or I2C protocol, from these classes. These classes include primary functions
+like read or set properties of Beaglebone Black's features and include additional functions
+like ADC parser, gpio pin toggle etc. to make easier your life.@n @n
+
+- - - -
+@n
+<h2> Definitions </h2>
+%BlackLib includes enum type definitions for your and Beaglebone Black's safety. GPIO, ADC, PWM,
+UART, SPI, I2C names; PWM, GPIO values; GPIO directions and a lot more features defined with enums.
+It means you can't call some member functions without use this enums. These enums avoid user errors
+like write 345 to gpio export file instead of 34.@n @n
+
+- - - -
+@n
+<h2> Old Web Pages </h2>
+    - %BlackLib v1.0 : http://blacklib.yigityuce.com/v1_0/
+
+ @n @n
+
+- - - -
+@n
+<h2> Contact </h2>
+For any comment or suggestion please contact the creator of %BlackLib Library at
+<b> contact[at]blacklib.yigityuce.com </b> @n @n
+*/
+
+
+
+
+
+/*! \page downloads Downloads
+You can download %BlackLib and its document with described methods below. @n
+______
+@n
+<h2>GitHub</h2>
+You can download all files from github. You must run this command,
+~~~~~~~~~~~~~~~~~~~~~
+git clone https://github.com/yigityuce/BlackLib.git
+~~~~~~~~~~~~~~~~~~~~~
+then appear %BlackLib directory in your current location. You can see this with "ls -l" command. You
+should read README file.
+
+Additionaly you can access source files and other documents of %BlackLib project at GitHub.
+<CENTER><a href="http://github.com/yigityuce/BlackLib" target="_blank" > <b> http://github.com/yigityuce/BlackLib </b></a></CENTER>
+@n
+______
+@n
+<h2>SourceForge</h2>
+You can download all files from sourceforge. You must click download button at project
+page, then it redirects you a download page and downloading starts automatically.@n
+<CENTER><a href="http://sourceforge.net/projects/blacklib/" target="_blank"> <b> BlackLib at SourceForge </b></a></CENTER>
+@n
+______
+@n
+*/
+
+
+/*! \page faq FAQ-Frequently Asked Questions
+@n
+<b> + Is it difficult to manipulate sequential I/O with your library for PWM, there is some way to to do this
+easily? (eg Inside a loop)</b>
+@n
+<i> - No it's so easy. You can use toggleValue() or setValue(gpio_value) function for changing gpio pin value.
+Pin changing value time is about 250 usecond. If you think use this method for generating pwm, this may be inefficient.</i>
+@n @n
+______
+@n @n
+<b> + I'm having a little trouble compiling the example file you included. Should I be doing something differently? </b>
+@n
+<i> - You must compile all files in %BlackLib sources like %BlackDef.h, %BlackErr.h, %BlackPWM.h etc. and then you must link
+to these compiled xxx.o files to your example.o file. But doing these steps at every changing in your code is hard and
+wasting your time. I captured a video of my desktop about doing cross compile setting to eclipse for compiling code to
+arm processor. Its link is below. You can install eclipse and then do cross compile settings to your eclipse in your
+computer. I promise your development process will be easier than now. @n Also you should googling like this;
+"compiling and linking multiple c++ file". Results may be useful for your case. @n @n http://youtu.be/zRB4ueWeQxM</i>
+@n @n
+______
+@n @n
+<b> + Just wondering how do you handle GPIO interrupt using your library. Do you have plan to add functionality related
+to GPIO interrupt handling? </b>
+@n
+<i> - Interrupts are divided into two types. These are hardware and software interrupts. For using hardware interrupt
+you must create special device tree overlay. This operation has various user defined component and it's generalization
+is hard so hardware interrupt support in %BlackLib is not planned. @n @n
+Also you can use software interrupt like signal slot mechanism, event system. But these are another software design world.
+In real world these methods implemented and most of these are open source. You can use these systems with %BlackLib.</i>
+@n @n
+______
+@n @n
+<b> + To cross compile it on a desktop I need the name of libraries (.so or .a) that %BlackLib needs in order to compile
+and link. I'll appreciate if you send me a list of libraries that %BlackLib needs for compiling.</b>
+@n
+<i> - %BlackLib uses only basic c++ libraries like fstream, string etc. I suggest you to using eclipse and if you using
+Ubuntu or any linux distrubition, gcc cross compiling tools. I captured a video for cross compiling c++ code with Eclipse
+on Ubuntu OS. I added youtube link to mail which i mentioned video. I suggest watching and appling this video for cross
+compiling. @n @n
+http://youtu.be/zRB4ueWeQxM</i>
+@n @n
+______
+@n @n
+<b> + Is the class %BlackGPIO have some issue in time responding? It can not react quickly enough as I turn on and off
+the GPIO pin that fast? </b>
+@n
+<i> - Actually BlackLib hasn't got issue about timing, because it is doing only file opearations. But this situation
+doesn't change anything about timing problem. The gpio pins' reaction time is unstable and little long. The reason of this
+problem is operating system. Any operating system which is running on Beaglebone Black is causing to delay. The delay of
+switching GPIO pin is about 250 microseconds. So if you want to generate PWM like signal you must use PWM or PRU. PRU is
+the little microprocessor which accesses pins directly without using any software layer like operating system, at the
+Beaglebone. The worst thing is about the PRU you must write the code with assembly.</i>
+@n @n
+______
+@n @n
+<b> + I found this summary on the web for example: http://stuffwemade.net/post/beaglebone-pinout and can't map it to
+%BlackLib. Lets say i want to use pin 10 of P8 ... what's the equivalent in %BlackLib enum? </b>
+@n
+<i> - The link which is mentioned in your mail includes old version of pin naming. I prefer you this link.
+(http://beagleboard.org/static/images/cape-headers-digital.png) It shows new naming style and also it is official web page.
+Also the old and new naming style is very similar, like below:
+
+   | Old style    |    New Style    |   Equation            |
+   | :----:       | :----:          | :----:                |
+   | gpio1_7      |    gpio39       |   (1x32)+7  = 39      |
+   | gpio3_21     |    gpio117      |   (3x32)+21 = 117     |
+   | gpioA_B      |    gpioM        |   (Ax32)+B  = M       |
+   |  .....       |     .....       |     ......... etc.    |
+
+Lets assume you want to use P8.10 pin. P8.10 equals GPIO2_4, at the link which you sent. This representation is old style.
+Lets calculate new name of this pin: @n @n
+(2 x 32) + 4 = 68   ==> GPIO68
+@n @n
+It is equal the GPIO68 at the new naming style. Lets check the link which i mention above
+(http://beagleboard.org/static/images/cape-headers-digital.png). And now in the %BlackLib if you want to use this pin, you
+must write only GPIO_68 at object instantination stage.</i>
+@n @n
+______
+@n @n
+*/
+
+
+
+
+
+/*! \page contact Contact
+For any comment or suggestion please contact the creator of %BlackLib Library
+at <b> contact[at]blacklib.yigityuce.com</b>@n @n
+<hr>@n
+Thanks for writing one of these subject below, when you're sending email.
+<CENTER>
+|               | SUBJECT                               |
+| :----         | ----:                                 |
+| Translation   | "BlackLib - User Manual Translate"    |
+| Bug           | "BlackLib - Bug Report"               |
+| Suggestion    | "BlackLib - Suggestion"               |
+| Other         | "BlackLib - Other"                    |
+</CENTER>
+*/
+
+
+
+
+
+
+/*! \page release-notes Release Notes
+    <h1> RELEASE NOTES FOR BLACKLIB v2.0</h1>
+    ______
+    @n @n
+    ## New Features
+         @par Communication Protocols:
+            - Add new communication protocol classes. These are uart, spi and i2c.
+            - Add install script for using spi.
+         @par Documantation:
+            - Add code examples to almost all functions.
+            - Add warning and information parts.
+            - Add example project tree and including information of every class.
+            - No more User-Manual support.
+         @par Performance:
+            - Add workingMode(SecureMode, FastMode) enumaration.
+            - Add secure and fast working modes to BlackGPIO.
+         @par Usability:
+            - Add namespace which named "BlackLib".
+            - Add default error string which occured when file openning, to BlackDef.h (FILE_COULD_NOT_OPEN_STRING)
+            - Add default error integer value which occured when file openning, to BlackDef.h (FILE_COULD_NOT_OPEN_INT)
+            - Add default error float value which occured when file openning, to BlackDef.h (FILE_COULD_NOT_OPEN_FLOAT)
+            - Add default error string which occured when checking gpio ready state, to BlackDef.h (GPIO_PIN_NOT_READY_STRING)
+            - Add default error integer which occured when checking gpio ready state, to BlackDef.h (GPIO_PIN_NOT_READY_INT)
+            - Add default error string which occured when searching pwm driver name, to BlackDef.h (PWM_TEST_NAME_NOT_FOUND)
+            - Add timeType(picosecond, nanosecond, microsecond, milisecond, second) enumaration.
+            - Add BlackCoreGPIO::getValueFilePath() function.
+            - Add BlackGPIO::setWorkingMode() function.
+            - Add BlackGPIO::getWorkingMode() function.
+            - Add BlackGPIO::getNumericValue() function.
+            - Add BlackCorePWM::getPeriodFilePath() function.
+            - Add BlackCorePWM::getDutyFilePath() function.
+            - Add BlackCorePWM::getRunFilePath() function.
+            - Add BlackCorePWM::getPolarityFilePath() function.
+            - Add operator(>>) overloads to BlackGPIO.
+            - Add operator(>>) overloads to BlackADC.
+
+    @n @n
+    ______
+    @n @n
+    ## Updates
+         @par Name Changes:
+            - Change "adc_name" enumaration name to "adcName".
+            - Change "gpio_type" enumaration name to "direction".
+            - Change "gpio_name" enumaration name to "gpioName".
+            - Change "gpio_value" enumaration name to "digitalValue".
+            - Change "pwm_run_value" enumaration name to "runValue".
+            - Change "pwm_polarity" enumaration name to "polarityType".
+            - Change BlackADC::getParsedValue() function name to BlackADC::getConvertedValue().
+            - Change BlackGPIO::getType() function name to BlackGPIO::getDirection().
+            - Merge "pwm_bus_name" and "pwm_pin_name" enumarations and change name to "pwmName".
+         @par Usability Improvements:
+            - Update included files.
+            - Insert "SPI0" and "SPI1" enumarators to BlackCore::ocpSearch for searching spi device number at the ocp directory.
+            - Update BlackCore::searchDirectoryOcp() function for searching spi device driver.
+            - Delete debug messages from BlackADC and BlackGPIO classes.
+            - Add working mode support to BlackGPIO::getValue() function.
+            - Add working mode support to BlackGPIO::setValue() function.
+            - Add time type support to BlackPWM::setPeriodTime() function.
+            - Add time type support to BlackPWM::setSpaceRatioTime() function.
+            - Add time type support to BlackPWM::setLoadRatioTime() function.
+            - Add "bothDirection" enumarator to "direction" (old name is "gpio_type") enumaration. (Note: If this enumarator is
+              used at BlackGPIO constructor parameter, it assumes your pin direction is input.)
+         @par Performance Improvements:
+            - Delete BlackCore::setSlotsFilePath() function and merge into the constructor.
+            - Optimize BlackADC::getValue() function.
+            - Optimize BlackADC::getNumericValue() function.
+            - Optimize BlackCoreGPIO::setDirection() function.
+            - Optimize BLACKPWM::setPeriodTime() function.
+            - Optimize BLACKPWM::setSpaceRatioTime() function.
+            - Optimize BLACKPWM::setLoadRatioTime() function.
+            - Optimize BLACKPWM::setDutyPercent() function.
+            - Optimize BLACKPWM::setPolarity() function.
+            - Optimize BLACKPWM::setRunState() function.
+            - Optimize BLACKPWM::tooglePolarity() function.
+            - Optimize BLACKPWM::toggleRunState() function.
+            - Optimize BLACKPWM::getNumericPeriodValue() and delete "strtoimax()" helper function from this function.
+            - Optimize BLACKPWM::getNumericDutyValue() and delete "strtoimax()" helper function from this function.
+            - Change initialization of error structure at BlackCore constructor.
+            - Change initialization of error structure at BlackCoreADC constructor.
+            - Change initialization of error structure at BlackCoreGPIO constructor.
+            - Change initialization of error structure at BlackCorePWM constructor.
+            - Change initialization of error structure at BlackADC constructor.
+            - Change initialization of error structure at BlackGPIO constructor.
+            - Change initialization of error structure at BlackPWM constructor.
+            - Add error structure pointer delete to BlackCore destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackCoreADC destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackCoreGPIO destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackCorePWM destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackADC destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackGPIO destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackPWM destructor for preventing memory leak.
+            - Change BLACKPWM::getNumericPeriodValue() function to inline.
+            - Change BLACKPWM::getNumericDutyValue() function to inline.
+            - Change toStr() function to inline.
+         @par Design Updates:
+            - Clean everything about initialization process from BlackGPIO class like "isInitializeBefore" flag, "initializeErr"
+              enumarator, initialize() and triggerInitialize() function.
+            - Clean everything about initialization process from BlackPWM class like "isInitializeBefore" flag, "initializeErr"
+              enumarator, initialize() and triggerInitialize() function.
+            - Delete BlackCorePWM::getPwmName() function.
+            - Delete BlackCorePWM::parsePwmName() function.
+            - Delete BlackCorePWM::getPwmName() function.
+            - Change "bool BlackCorePWM::findPwmTestName()" function to "std::string BlackCorePWM::findPwmTestName(pwmName)".
+            - Change "BlackCorePWM::setPeriodTime(uint32_t)" function to "BlackCorePWM::setPeriodTime(uint64_t, timeType)".
+            - Change "BlackCorePWM::setSpaceRatioTime(uint32_t)" function to "BlackCorePWM::setSpaceRatioTime(uint64_t, timeType)".
+            - Change "BlackCorePWM::setLoadRatioTime(uint32_t)" function to "BlackCorePWM::setLoadRatioTime(uint64_t, timeType)".
+            - Move "pwmPinName" variable from BlackPWM to BlackCorePWM.
+*/
+
+/*! \page release_notes-v2_0 BlackLib v2.0
+    <h1> RELEASE NOTES FOR BLACKLIB v2.0</h1>
+    ______
+    @n @n
+    ## New Features
+         @par Communication Protocols:
+            - Add new communication protocol classes. These are uart, spi and i2c.
+            - Add install script for using spi.
+         @par Documantation:
+            - Add code examples to almost all functions.
+            - Add warning and information parts.
+            - Add example project tree and including information of every class.
+            - No more User-Manual support.
+         @par Performance:
+            - Add workingMode(SecureMode, FastMode) enumaration.
+            - Add secure and fast working modes to BlackGPIO.
+         @par Usability:
+            - Add namespace which named "BlackLib".
+            - Add default error string which occured when file openning, to BlackDef.h (FILE_COULD_NOT_OPEN_STRING)
+            - Add default error integer value which occured when file openning, to BlackDef.h (FILE_COULD_NOT_OPEN_INT)
+            - Add default error float value which occured when file openning, to BlackDef.h (FILE_COULD_NOT_OPEN_FLOAT)
+            - Add default error string which occured when checking gpio ready state, to BlackDef.h (GPIO_PIN_NOT_READY_STRING)
+            - Add default error integer which occured when checking gpio ready state, to BlackDef.h (GPIO_PIN_NOT_READY_INT)
+            - Add default error string which occured when searching pwm driver name, to BlackDef.h (PWM_TEST_NAME_NOT_FOUND)
+            - Add timeType(picosecond, nanosecond, microsecond, milisecond, second) enumaration.
+            - Add BlackCoreGPIO::getValueFilePath() function.
+            - Add BlackGPIO::setWorkingMode() function.
+            - Add BlackGPIO::getWorkingMode() function.
+            - Add BlackGPIO::getNumericValue() function.
+            - Add BlackCorePWM::getPeriodFilePath() function.
+            - Add BlackCorePWM::getDutyFilePath() function.
+            - Add BlackCorePWM::getRunFilePath() function.
+            - Add BlackCorePWM::getPolarityFilePath() function.
+            - Add operator(>>) overloads to BlackGPIO.
+            - Add operator(>>) overloads to BlackADC.
+
+    @n @n
+    ______
+    @n @n
+    ## Updates
+         @par Name Changes:
+            - Change "adc_name" enumaration name to "adcName".
+            - Change "gpio_type" enumaration name to "direction".
+            - Change "gpio_name" enumaration name to "gpioName".
+            - Change "gpio_value" enumaration name to "digitalValue".
+            - Change "pwm_run_value" enumaration name to "runValue".
+            - Change "pwm_polarity" enumaration name to "polarityType".
+            - Change BlackADC::getParsedValue() function name to BlackADC::getConvertedValue().
+            - Change BlackGPIO::getType() function name to BlackGPIO::getDirection().
+            - Merge "pwm_bus_name" and "pwm_pin_name" enumarations and change name to "pwmName".
+         @par Usability Improvements:
+            - Update included files.
+            - Insert "SPI0" and "SPI1" enumarators to BlackCore::ocpSearch for searching spi device number at the ocp directory.
+            - Update BlackCore::searchDirectoryOcp() function for searching spi device driver.
+            - Delete debug messages from BlackADC and BlackGPIO classes.
+            - Add working mode support to BlackGPIO::getValue() function.
+            - Add working mode support to BlackGPIO::setValue() function.
+            - Add time type support to BlackPWM::setPeriodTime() function.
+            - Add time type support to BlackPWM::setSpaceRatioTime() function.
+            - Add time type support to BlackPWM::setLoadRatioTime() function.
+            - Add "bothDirection" enumarator to "direction" (old name is "gpio_type") enumaration. (Note: If this enumarator is
+              used at BlackGPIO constructor parameter, it assumes your pin direction is input.)
+         @par Performance Improvements:
+            - Delete BlackCore::setSlotsFilePath() function and merge into the constructor.
+            - Optimize BlackADC::getValue() function.
+            - Optimize BlackADC::getNumericValue() function.
+            - Optimize BlackCoreGPIO::setDirection() function.
+            - Optimize BLACKPWM::setPeriodTime() function.
+            - Optimize BLACKPWM::setSpaceRatioTime() function.
+            - Optimize BLACKPWM::setLoadRatioTime() function.
+            - Optimize BLACKPWM::setDutyPercent() function.
+            - Optimize BLACKPWM::setPolarity() function.
+            - Optimize BLACKPWM::setRunState() function.
+            - Optimize BLACKPWM::tooglePolarity() function.
+            - Optimize BLACKPWM::toggleRunState() function.
+            - Optimize BLACKPWM::getNumericPeriodValue() and delete "strtoimax()" helper function from this function.
+            - Optimize BLACKPWM::getNumericDutyValue() and delete "strtoimax()" helper function from this function.
+            - Change initialization of error structure at BlackCore constructor.
+            - Change initialization of error structure at BlackCoreADC constructor.
+            - Change initialization of error structure at BlackCoreGPIO constructor.
+            - Change initialization of error structure at BlackCorePWM constructor.
+            - Change initialization of error structure at BlackADC constructor.
+            - Change initialization of error structure at BlackGPIO constructor.
+            - Change initialization of error structure at BlackPWM constructor.
+            - Add error structure pointer delete to BlackCore destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackCoreADC destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackCoreGPIO destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackCorePWM destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackADC destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackGPIO destructor for preventing memory leak.
+            - Add error structure pointer delete to BlackPWM destructor for preventing memory leak.
+            - Change BLACKPWM::getNumericPeriodValue() function to inline.
+            - Change BLACKPWM::getNumericDutyValue() function to inline.
+            - Change toStr() function to inline.
+         @par Design Updates:
+            - Clean everything about initialization process from BlackGPIO class like "isInitializeBefore" flag, "initializeErr"
+              enumarator, initialize() and triggerInitialize() function.
+            - Clean everything about initialization process from BlackPWM class like "isInitializeBefore" flag, "initializeErr"
+              enumarator, initialize() and triggerInitialize() function.
+            - Delete BlackCorePWM::getPwmName() function.
+            - Delete BlackCorePWM::parsePwmName() function.
+            - Delete BlackCorePWM::getPwmName() function.
+            - Change "bool BlackCorePWM::findPwmTestName()" function to "std::string BlackCorePWM::findPwmTestName(pwmName)".
+            - Change "BlackCorePWM::setPeriodTime(uint32_t)" function to "BlackCorePWM::setPeriodTime(uint64_t, timeType)".
+            - Change "BlackCorePWM::setSpaceRatioTime(uint32_t)" function to "BlackCorePWM::setSpaceRatioTime(uint64_t, timeType)".
+            - Change "BlackCorePWM::setLoadRatioTime(uint32_t)" function to "BlackCorePWM::setLoadRatioTime(uint64_t, timeType)".
+            - Move "pwmPinName" variable from BlackPWM to BlackCorePWM.
+*/
+
+
+
