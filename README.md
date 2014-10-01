@@ -36,4 +36,4 @@ For any comment or suggestion please contact the creator of BlackLib Library at 
 
 
 --------------------------------------------------------------------------------
-		http://blacklib.yigityuce.com	
+		[BlackLib Official WebPage](http://blacklib.yigityuce.com)	
