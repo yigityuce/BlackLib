@@ -40,6 +40,7 @@
 #include "../BlackGPIO.h"
 #include <string>
 #include <iostream>
+#include <unistd.h>
 #include "Timing.h"
 
 

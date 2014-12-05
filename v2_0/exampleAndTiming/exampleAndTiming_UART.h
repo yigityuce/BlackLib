@@ -38,6 +38,7 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
+#include <unistd.h>
 #include "Timing.h"
 
 
