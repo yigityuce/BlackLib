@@ -226,10 +226,10 @@ namespace BlackLib
                                 Baud9600                = 13,
                                 Baud19200               = 14,
                                 Baud38400               = 15,
-								Baud57600				= 0x1001,
-								Baud115200				= 0x1002,
-								Baud230400				= 0x1003,
-								Baud460800				= 0x1004
+                                Baud57600				= 0x1001,
+                                Baud115200				= 0x1002,
+                                Baud230400				= 0x1003,
+                                Baud460800				= 0x1004
                             };
 
 
