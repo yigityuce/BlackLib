@@ -49,6 +49,8 @@ add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
 export(PACKAGE BlackLib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/lib")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin")
 set(BlackLib_INCLUDE_DIRS "${INCLUDE_DIRS}")
 set(BlackLib_LIB_DIR "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 # not used right now (export depends?)
@@ -59,14 +61,14 @@ configure_file(blacklib-config-version.cmake.in
   "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/blacklib/blacklib-config-version.cmake" @ONLY)
 
 install(FILES
-  "${PROJECT_BINARY_DIR}/InstallFiles/blacklib-config.cmake"
-  "${PROJECT_BINARY_DIR}/InstallFiles/blacklib-config-version.cmake"
-  DESTINATION lib/cmake/blacklib/)
+  "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/blacklib/blacklib-config.cmake"
+  "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/cmake/blacklib/blacklib-config-version.cmake"
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/cmake/blacklib/)
 
 # Write pkgconfig-file:
 include(InstallPkgConfigFile)
 install_pkg_config_file(blacklib
     CFLAGS
-    LIBS -lblacklib -loctomath
+    LIBS -lblacklib
     REQUIRES
-    VERSION ${BlackLib_MAJOR_VERSION}.${BlackLib_MINOR_VERSION}.${BlackLib_PATCH_VERSION})
+    VERSION ${BlackLib_VERSION})
