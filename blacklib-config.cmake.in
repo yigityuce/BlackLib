@@ -1,0 +1,17 @@
+# - Config file for the BlackLib package
+# (example from http://www.vtk.org/Wiki/CMake/Tutorials/How_to_create_a_ProjectConfig.cmake_file)
+# It defines the following variables
+#  BlackLib_INCLUDE_DIRS - include directories for BlackLib
+#  BlackLib_LIBRARY_DIRS - library directories for BlackLib (normally not used!)
+#  BlackLib_LIBRARIES    - libraries to link against
+
+# Tell the user project where to find our headers and libraries
+set(BlackLib_INCLUDE_DIRS @BlackLib_INCLUDE_DIRS@)
+set(BlackLib_LIBRARY_DIRS @BlackLib_LIB_DIR@)
+
+# Our library dependencies (contains definitions for IMPORTED targets)
+# include("@FOOBAR_CMAKE_DIR@/FooBarLibraryDepends.cmake")
+
+set(BlackLib_LIBRARIES BlackLib)
+
+#set(FOOBAR_EXECUTABLE bar)

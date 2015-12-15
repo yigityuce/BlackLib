@@ -1,5 +1,11 @@
 BlackLib library is written for controlling Beaglebone Black's feature. It takes power from C++ language. It is created for reading analog input, generating pwm signal, using gpio pins, and communicating with other devices over uart, spi and i2c. In addition to them, it includes debugging feature. So you can check errors after call any function in the library. It also takes parallel programming, mutex usability, realization of directory operation and realization of time operation ability with the last update(BlackLiv v3.0).
 
+## Installation
+**NOTE:** This library must be built on the BeagleBone Black.
+
+1. Inside this directory: `mkdir build; cd build;`
+2. Choose an installation location, for instance, if using with ROS, consider `~/catkin_ws/devel/` Consider this location as `$INSTALL_DIR` in the next step.
+3. `cmake -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR ..; make install`
 
 --------------------------------------------------------------------------------
 ## Debugging
