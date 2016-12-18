@@ -521,7 +521,7 @@ namespace BlackLib
 
     bool        BlackPWM::isPolarityStraight()
     {
-        return !(this->getPolarityValue() == "1");
+        return !(this->getPolarityValue() == "0");
     }
 
     bool        BlackPWM::isPolarityReverse()
